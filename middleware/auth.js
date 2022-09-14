@@ -17,8 +17,6 @@ export const adminAuth = (req, res, next) => {
     else res.sendStatus(403);
 };
 
-export const router = express.Router();
-
 //TODO implement state paramter (session?)
 
 router.get('/login', (req, res) => {
@@ -35,3 +33,5 @@ router.get('/logout', (req, res) => {
     };
     res.redirect('/');
 });
+
+export const router = express.Router();
