@@ -8,7 +8,9 @@ export const userAuth = (req, res, next) => {
 };
 
 export const captainAuth = (req, res, next) => {
-    //TODO get roles from session object and query db for captain roles, find intersection
+    //TODO get roles from session object and query db for captain roles
+    // find intersection
+    // pass captain id/snowflake in res.locals
     next();
 };
 
