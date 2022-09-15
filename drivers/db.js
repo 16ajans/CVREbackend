@@ -93,6 +93,9 @@ const divisionSchema = new Schema({
     }
 });
 
+mongoose.connect(process.env.MONGODB_URI);
+
+export default db = mongoose.connection;
 export const User = mongoose.model('User', userSchema);
 export const Role = mongoose.model('Role', roleSchema);
 export const Player = mongoose.model('Player', playerSchema);

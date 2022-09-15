@@ -28,8 +28,10 @@ router.get('/callback', (req, res) => {
 router.get('/logout', (req, res) => {
     if (req.session.user) {
         revokeToken(req.session.user.token);
+        User.findOneAndUpdate({ snowflake: req.session.user.snowflake }, {
+            auth: {}
+        });
         req.session.destroy();
-        //TODO delete token info in db
     };
     res.redirect('/');
 });
