@@ -36,7 +36,8 @@ const playerSchema = new Schema({
     discriminator: Number,
     captain: {
         type: Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        immutable: true
     },
     verified: Boolean,
     roles: [String],
@@ -44,7 +45,7 @@ const playerSchema = new Schema({
     // sensitive info:
     name: String,
     school: String,
-    verification: Buffer
+    verification: Buffer //???
 });
 
 const assignmentSchema = new Schema({
@@ -60,7 +61,8 @@ const teamSchema = new Schema({
     name: String,
     captain: {
         type: Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        immutable: true
     },
     logo: Buffer,
     region: String,
@@ -73,7 +75,8 @@ const divisionSchema = new Schema({
     open: Boolean,
     admin: {
         type: Types.ObjectId,
-        ref: 'User'
+        ref: 'User',
+        immutable: true
     },
     logo: Buffer,
     desc: String,

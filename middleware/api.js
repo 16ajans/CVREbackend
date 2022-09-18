@@ -15,6 +15,7 @@ router.route('/divisions', adminAuth)
     })
     .post((req, res) => {
         const doc = new Division({ ...req.body });
+        doc.admin = req.session.user._id;
         doc.save((err) => {
             if (err) res.status(500).send(err);
             res.sendStatus(200);
@@ -131,15 +132,23 @@ router.get('/users/me', userAuth, async (req, res) => {
     res.json(await User.findOne({ _id: req.session.user._id }).lean());
 });
 router.route('/users/me/players', captainAuth)
-    .get((req, res) => {
-
+    .get(async (req, res) => {
+        res.json(await Player.find({ captain: req.session.user._id }.lean()));
     })
     .post((req, res) => {
-
+        const doc = new Player({ ...req.body });
+        doc.captain = req.session.user._id;
+        doc.save((err) => {
+            if (err) res.status(500).send(err);
+            res.sendStatus(200); //TODO VERIFICATION
+        });
     });
 router.route('/users/me/players/:playerID', captainAuth)
-    .get((req, res) => {
-
+    .get(async (req, res) => {
+        res.json(await Player.findOne({
+            captain: req.session.user._id,
+            _id: req.params.playerID
+        }.lean()));
     })
     .patch((req, res) => {
 
@@ -182,7 +191,7 @@ router.route('/users/me/teams/:teamID/players/:playerID', captainAuth)
 
     });
 
-router.get('/stream', (req, res) => { 
+router.get('/stream', (req, res) => {
     Division.find({ game: "Beat Saber" })
         .select('name teams')
         .populate({
@@ -190,11 +199,11 @@ router.get('/stream', (req, res) => {
             select: 'name players'
         })
         .lean();
-        //TODO transform into justin's expected keys and layout
+    //TODO transform into justin's expected keys and layout
 });
 
 router.get('/public', (req, res) => {
     // divisions
-        // teams
-            // players
+    // teams
+    // players
 });
