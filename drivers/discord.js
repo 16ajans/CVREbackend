@@ -50,5 +50,3 @@ export async function getGuildRoles(token) {
     });
     return res.data.roles;
 };
-
-//TODO role management

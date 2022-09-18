@@ -23,7 +23,8 @@ const roleSchema = new Schema({
     },
     name: String,
     color: String,
-    captain: Boolean
+    approved: Boolean,
+    verified: Boolean
 });
 
 const playerSchema = new Schema({
@@ -33,18 +34,21 @@ const playerSchema = new Schema({
     },
     username: String,
     discriminator: Number,
-    streamID: {
-        type: Types.ObjectId,
-        default: new Types.ObjectId
-    },
     captain: {
         type: Types.ObjectId,
         ref: 'User'
     },
+    verified: Boolean,
+    roles: [String],
+
+    // sensitive info:
     name: String,
     school: String,
     verification: Buffer,
-    verified: Boolean
+    streamID: {
+        type: Types.ObjectId,
+        default: new Types.ObjectId
+    }
 });
 
 const assignmentSchema = new Schema({
@@ -93,6 +97,7 @@ const divisionSchema = new Schema({
     }
 });
 
+//TODO error handling
 mongoose.connect(process.env.MONGODB_URI);
 
 export default db = mongoose.connection;
