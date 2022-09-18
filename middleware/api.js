@@ -182,10 +182,19 @@ router.route('/users/me/teams/:teamID/players/:playerID', captainAuth)
 
     });
 
-router.get('/stream', (req, res) => {
-
+router.get('/stream', (req, res) => { 
+    Division.find({ game: "Beat Saber" })
+        .select('name teams')
+        .populate({
+            path: 'teams',
+            select: 'name players'
+        })
+        .lean();
+        //TODO transform into justin's expected keys and layout
 });
 
 router.get('/public', (req, res) => {
-
+    // divisions
+        // teams
+            // players
 });

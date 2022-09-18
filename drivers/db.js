@@ -44,11 +44,7 @@ const playerSchema = new Schema({
     // sensitive info:
     name: String,
     school: String,
-    verification: Buffer,
-    streamID: {
-        type: Types.ObjectId,
-        default: new Types.ObjectId
-    }
+    verification: Buffer
 });
 
 const assignmentSchema = new Schema({
