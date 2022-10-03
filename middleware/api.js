@@ -2,7 +2,7 @@ import express from 'express'
 import { User, Role, Player, Assignment, Team, Division } from '../drivers/db.js'
 import { userAuth, captainAuth, adminAuth } from './auth.js'
 
-// TODO error handling, queries, convert async/await to promises, swap findOne for findById(?)
+// TODO error handling, url queries, convert async/await to promises, swap findOne for findById(?)
 
 export const router = express.Router()
 

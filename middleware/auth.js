@@ -29,6 +29,7 @@ router.get('/login', (req, res) => {
 })
 
 // TODO error handling, implement state paramter (session?)
+// TODO token handling? keep it in the session and encrypt?
 
 router.get('/callback', async (req, res) => { // TODO speed up?
     const tokenResponse = await getTokenResponse(req.query.code)
