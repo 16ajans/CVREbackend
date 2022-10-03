@@ -1,5 +1,7 @@
-import mongoose from 'mongoose';
-const { Schema, Types } = mongoose;
+import mongoose from 'mongoose'
+const { Schema, Types } = mongoose
+
+// TODO validation
 
 const userSchema = new Schema({
     snowflake: {
@@ -14,7 +16,7 @@ const userSchema = new Schema({
         type: Map,
         of: String
     }
-});
+})
 
 const roleSchema = new Schema({
     snowflake: {
@@ -25,7 +27,7 @@ const roleSchema = new Schema({
     color: String,
     approved: Boolean,
     verified: Boolean
-});
+})
 
 const playerSchema = new Schema({
     snowflake: {
@@ -45,8 +47,8 @@ const playerSchema = new Schema({
     // sensitive info:
     name: String,
     school: String,
-    verification: Buffer //???
-});
+    verification: Buffer // ???
+})
 
 const assignmentSchema = new Schema({
     player: {
@@ -55,7 +57,7 @@ const assignmentSchema = new Schema({
     },
     scoresaber: String,
     gamertag: String
-});
+})
 
 const teamSchema = new Schema({
     name: String,
@@ -67,7 +69,7 @@ const teamSchema = new Schema({
     logo: Buffer,
     region: String,
     players: [assignmentSchema]
-});
+})
 
 const divisionSchema = new Schema({
     name: String,
@@ -94,15 +96,14 @@ const divisionSchema = new Schema({
         type: Types.ObjectId,
         ref: 'Role'
     }
-});
+})
 
-//TODO error handling
-mongoose.connect(process.env.MONGODB_URI);
+// TODO error handling
+mongoose.connect(process.env.MONGODB_URI)
 
-export default db = mongoose.connection;
-export const User = mongoose.model('User', userSchema);
-export const Role = mongoose.model('Role', roleSchema);
-export const Player = mongoose.model('Player', playerSchema);
-export const Assignment = mongoose.model('Assignment', assignmentSchema);
-export const Team = mongoose.model('Team', teamSchema);
-export const Division = mongoose.model('Division', divisionSchema);
+export const User = mongoose.model('User', userSchema)
+export const Role = mongoose.model('Role', roleSchema)
+export const Player = mongoose.model('Player', playerSchema)
+export const Assignment = mongoose.model('Assignment', assignmentSchema)
+export const Team = mongoose.model('Team', teamSchema)
+export const Division = mongoose.model('Division', divisionSchema)
