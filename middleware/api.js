@@ -7,8 +7,8 @@ import { router as roles } from './api/roles.js'
 import { router as users } from './api/users.js'
 import { router as players } from './api/players.js'
 
-// TODO error handling with middleware, filter queries
-// TODO populate option?
+// TODO: error handling with middleware, filter queries
+// TODO: populate option?
 
 export const router = express.Router()
 
@@ -22,7 +22,7 @@ router.use('/players', adminAuth, players)
 
 router.use('/users', users)
 
-// TODO teams for admins?
+// TODO: teams for admins?
 
 router.get('/stream', (req, res) => {
     Division.find({ game: 'Beat Saber' })
@@ -32,7 +32,7 @@ router.get('/stream', (req, res) => {
             select: 'name players'
         })
         .lean()
-    // TODO transform into justin's expected keys and layout
+    // TODO: transform into justin's expected keys and layout
 })
 
 router.get('/public', (req, res) => {
