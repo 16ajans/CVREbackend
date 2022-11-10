@@ -9,7 +9,7 @@ client.once(Events.ClientReady, async (c) => {
     console.log(`Ready! Logged in as ${c.user.tag}`)
     guild = c.guilds.resolve(process.env.GUILD_ID)
 
-    // console.log(guild.members.me.permissions.toArray());
+    console.log(await fetchGuildRoles())
 })
 
 // TODO: watch gateway for captain and player role changes
@@ -33,11 +33,11 @@ export async function fetchMemberRoles (userSnowflake) {
 }
 export async function fetchGuildRoles () {
     const roles = await guild.roles.fetch()
-    // let roleList = roles.map((role) => [role.position, role.id, role.name]);
-    const roleList = roles.map((role) => role.id)
-    // roleList.sort((a, b) => {
-    // return b[0] - a[0];
-    // });
+    const roleList = roles.map((role) => [role.position, role.id, role.name])
+    // const roleList = roles.map((role) => role.id)
+    roleList.sort((a, b) => {
+        return b[0] - a[0]
+    })
     return roleList
 }
 
