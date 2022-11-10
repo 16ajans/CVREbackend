@@ -1,4 +1,4 @@
-import 'dotenv/config'
+import 'dotenv/config' // FIXME: temporary for testing
 import { Client, Events } from 'discord.js'
 
 // TODO: understand if i need gateway intents
