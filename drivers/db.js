@@ -10,23 +10,11 @@ const userSchema = new Schema({
     },
     username: String,
     discriminator: Number,
-    roles: [String],
     avatar: String,
     auth: {
         type: Map,
         of: String
     }
-})
-
-const roleSchema = new Schema({
-    snowflake: {
-        type: String,
-        unique: true
-    },
-    name: String,
-    color: String,
-    approved: Boolean,
-    verified: Boolean
 })
 
 const playerSchema = new Schema({
@@ -42,12 +30,10 @@ const playerSchema = new Schema({
         immutable: true
     },
     verified: Boolean,
-    roles: [String],
 
     // sensitive info:
     name: String,
-    school: String,
-    verification: Buffer // ???
+    school: String
 })
 
 const assignmentSchema = new Schema({
@@ -80,29 +66,23 @@ const divisionSchema = new Schema({
         ref: 'User',
         immutable: true
     },
-    logo: Buffer,
     desc: String,
     minPlayers: Number,
     maxPlayers: Number,
-    teams: [{
-        type: Types.ObjectId,
-        ref: 'Team'
-    }],
-    playerRole: {
-        type: Types.ObjectId,
-        ref: 'Role'
-    },
-    captainRole: {
-        type: Types.ObjectId,
-        ref: 'Role'
-    }
+    teams: [
+        {
+            type: Types.ObjectId,
+            ref: 'Team'
+        }
+    ],
+    playerRole: String,
+    captainRole: String
 })
 
 // TODO error handling
 mongoose.connect(process.env.MONGODB_URI)
 
 export const User = mongoose.model('User', userSchema)
-export const Role = mongoose.model('Role', roleSchema)
 export const Player = mongoose.model('Player', playerSchema)
 export const Assignment = mongoose.model('Assignment', assignmentSchema)
 export const Team = mongoose.model('Team', teamSchema)

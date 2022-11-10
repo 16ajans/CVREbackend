@@ -22,8 +22,6 @@ router.use('/players', adminAuth, players)
 
 router.use('/users', users)
 
-// TODO: teams for admins?
-
 router.get('/stream', (req, res) => {
     Division.find({ game: 'Beat Saber' })
         .select('name teams')
