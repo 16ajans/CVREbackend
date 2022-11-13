@@ -1,15 +1,15 @@
 import 'dotenv/config' // FIXME: temporary for testing
-import { Client, Events } from 'discord.js'
+import { Client, Events, GatewayIntentBits } from 'discord.js'
 
 // TODO: understand if i need gateway intents
-const client = new Client({ intents: [] })
+const client = new Client({ intents: [GatewayIntentBits.Guilds] })
 let guild
 
 client.once(Events.ClientReady, async (c) => {
     console.log(`Ready! Logged in as ${c.user.tag}`)
     guild = c.guilds.resolve(process.env.GUILD_ID)
 
-    console.log(await fetchGuildRoles())
+    console.log(guild.members.me.permissions)
 })
 
 // TODO: watch gateway for captain and player role changes
