@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="js/es.js"></script>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.png" />
+    <title>CVRE Roster | Managing Divisions</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/stylesheets/normalize.css" />
+    <link rel="stylesheet" href="/stylesheets/universal.css" />
+    <script src="js/sidebars.js" defer></script>
+    <script src="js/divisions.js" defer></script>
+  </head>
+
+  <body>
+    <header>
+      <div id="menuButton" class="autoCursor">
+        <i class="gg-menu"></i>
+      </div>
+      <img src="/assets/CVRE.png" alt="CVRE Logo" />
+      <div id="profileButton"></div>
+    </header>
+    <nav id="leftBar"></nav>
+    <nav id="rightBar"></nav>
+    <main>
+      <section id="divList">
+        <card class="skeleton"> </card>
+      </section>
+      <button id="newDiv">Add new division...</button>
+    </main>
+    <aside id="divDrawer">
+      <form id="divForm">
+        <fieldset>
+          <legend>Division</legend>
+          <label for="divGame">Game:</label>
+          <input type="text" name="game" id="divGame" required />
+          <label for="divName">Name:</label>
+          <input type="text" name="name" id="divName" required />
+          <label for="divDesc">Description:</label>
+          <textarea name="desc" id="divDesc" style="resize: none"> </textarea>
+        </fieldset>
+        <fieldset>
+          <legend>Configuration</legend>
+          <div>
+            <div>
+              <label for="divOpen">Open for Registration:</label>
+              <div class="tooltip">
+                <i class="gg-info"></i
+                ><span class="tooltiptext">Currently accepting teams. </span>
+              </div>
+            </div>
+            <input type="checkbox" name="open" id="divOpen" />
+          </div>
+          <label for="adminDiscord">Admin Contact Discord:</label>
+          <input type="search" id="adminDiscord" />
+          <select id="adminDiscordSel" name="admin" required>
+            <option value="">Search for CVRE member...</option>
+          </select>
+          <div>
+            <div>
+              <label for="divMinPlayers">Min Players per Team:</label>
+              <div class="tooltip">
+                <i class="gg-info"></i
+                ><span class="tooltiptext">Optional, inclusive. </span>
+              </div>
+            </div>
+            <input type="number" name="minPlayers" id="divMinPlayers" min="1" />
+          </div>
+          <div>
+            <div>
+              <label for="divMaxPlayers">Max Players per Team:</label>
+              <div class="tooltip">
+                <i class="gg-info"></i
+                ><span class="tooltiptext">Optional, inclusive. </span>
+              </div>
+            </div>
+            <input type="number" name="maxPlayers" id="divMaxPlayers" min="1" />
+          </div>
+          <div>
+            <label for="playerRole">Player Role:</label>
+            <div class="tooltip">
+              <i class="gg-info"></i
+              ><span class="tooltiptext"
+                >You will NOT be able to change player role after div
+                creation.</span
+              >
+            </div>
+          </div>
+          <input type="search" id="playerRole" />
+          <select id="playerRoleSel" name="playerRole" required>
+            <option value="">Search for CVRE server role...</option>
+          </select>
+          <!-- <label for="captainRole">Captain Role:</label>
+          <input type="search" id="captainRole" />
+          <select id="captainRoleSel" name="captainRole" required>
+            <option value="">Search for CVRE server role...</option>
+          </select> -->
+        </fieldset>
+      </form>
+      <div>
+        <input form="divForm" type="submit" value="Save" />
+        <input form="divForm" type="reset" value="Cancel" />
+      </div>
+    </aside>
+    <script>
+      let roleCache = []
+
+      axios({
+        method: 'get',
+        url: `/api/divisions/roles`
+      }).then((res) => {
+        roleCache = res.data
+      })
+
+      let typingTimerPlayer
+      let typingTimerCaptain
+      const doneTypingInterval = 500 // ms
+      const playerRole = document.getElementById('playerRole')
+      // const captainRole = document.getElementById('captainRole')
+
+      playerRole.addEventListener('keyup', () => {
+        clearTimeout(typingTimerPlayer)
+        if (playerRole.value) {
+          typingTimerPlayer = setTimeout(doneTypingPlayer, doneTypingInterval)
+        }
+      })
+      // captainRole.addEventListener('keyup', () => {
+      //   clearTimeout(typingTimerCaptain)
+      //   if (captainRole.value) {
+      //     typingTimerCaptain = setTimeout(doneTypingCaptain, doneTypingInterval)
+      //   }
+      // })
+
+      function doneTypingPlayer() {
+        const re = new RegExp(playerRole.value, 'i')
+        let filtered = roleCache.filter((role) => re.test(role[1]))
+        if (filtered.length == 0) {
+          uhtml.render(
+            document.getElementById('playerRoleSel'),
+            uhtml.html`<option value=''>Found no roles with this name!</option>`
+          )
+        } else {
+          uhtml.render(
+            document.getElementById('playerRoleSel'),
+            uhtml.html`${filtered.map(
+              (result) =>
+                uhtml.html`<option value='${result[0]}'>${result[1]}</option>`
+            )}`
+          )
+        }
+      }
+
+      // function doneTypingCaptain() {
+      //   const re = new RegExp(captainRole.value, 'i')
+      //   let filtered = roleCache.filter((role) => re.test(role[1]))
+      //   if (filtered.length == 0) {
+      //     uhtml.render(
+      //       document.getElementById('captainRoleSel'),
+      //       uhtml.html`<option value=''>Found no roles with this name!</option>`
+      //     )
+      //   } else {
+      //     uhtml.render(
+      //       document.getElementById('captainRoleSel'),
+      //       uhtml.html`${filtered.map(
+      //         (result) =>
+      //           uhtml.html`<option value='${result[0]}'>${result[1]}</option>`
+      //       )}`
+      //     )
+      //   }
+      // }
+    </script>
+  </body>
+</html>

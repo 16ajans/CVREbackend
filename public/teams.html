@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="js/es.js"></script>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.png" />
+    <title>CVRE Roster | Managing Teams</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/stylesheets/universal.css" />
+    <link rel="stylesheet" href="/stylesheets/normalize.css" />
+    <script src="js/sidebars.js" defer></script>
+    <script src="js/teams.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div id="menuButton" class="autoCursor">
+        <i class="gg-menu"></i>
+      </div>
+      <img src="/assets/CVRE.png" alt="CVRE Logo" />
+      <div id="profileButton"></div>
+    </header>
+    <nav id="leftBar"></nav>
+    <nav id="rightBar"></nav>
+    <main>
+      <section id="teamList">
+        <card class="skeleton"> </card>
+      </section>
+      <button id="newTeam">Add new team...</button>
+    </main>
+    <aside id="teamDrawer">
+      <form id="teamForm">
+        <fieldset>
+          <div>
+            <label for="divSel">Division: </label>
+            <div class="tooltip">
+              <i class="gg-info"></i
+              ><span class="tooltiptext"
+                >The division this team belongs to. You will NOT be able to
+                change division after team creation.</span
+              >
+            </div>
+          </div>
+          <select name="division" id="divSel" required>
+            <option value="">No Divisions</option>
+          </select>
+          <label for="teamName">Team Name:</label>
+          <input type="text" name="name" id="teamName" required />
+          <div>
+            <label for="teamLocale">School: </label>
+            <div class="tooltip">
+              <i class="gg-info"></i
+              ><span class="tooltiptext" style="width: 160px"
+                >Please enter school unless this team is regional:
+                <ul style="font-size: smaller">
+                  <li>US Midwest</li>
+                  <li>US Northeast</li>
+                  <li>US Pacific</li>
+                  <li>US Rocky Mountains</li>
+                  <li>US Southeast</li>
+                  <li>US Southwest</li>
+                  <li>Canada</li>
+                </ul></span
+              >
+            </div>
+          </div>
+          <input
+            type="text"
+            name="locale"
+            id="teamLocale"
+            required
+            list="regionList"
+          />
+          <div>
+            <label for="teamLogo">Team Logo:</label>
+            <div class="tooltip">
+              <i class="gg-info"></i
+              ><span class="tooltiptext"
+                >Optional, accepts images up to 8MB in size. Used by the stream
+                team for overlay graphics.
+              </span>
+            </div>
+          </div>
+          <input type="file" name="logo" id="teamLogo" accept="image/*" />
+        </fieldset>
+      </form>
+      <div>
+        <input form="teamForm" type="submit" value="Save" />
+        <input form="teamForm" type="reset" value="Cancel" />
+      </div>
+    </aside>
+    <aside id="assignDrawer">
+      <form id="assignForm">
+        <fieldset>
+          <label for="teamSel">Team:</label>
+          <select name="team_id" id="teamSel" disabled required>
+            <option value="">No Teams</option>
+          </select>
+          <label for="playerSel">Player:</label>
+          <select name="player" id="playerSel" required>
+            <option value="">No Players</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <div>
+            <label for="assignTag">In-Game Username:</label>
+            <div class="tooltip">
+              <i class="gg-info"></i
+              ><span class="tooltiptext"
+                >Player's in-game or platform username, e.g. Meta username.
+                Especially important if different from Discord tag.
+              </span>
+            </div>
+          </div>
+          <input type="text" name="gamertag" id="assignTag" required />
+          <div>
+            <label for="scTag">ScoreSaber:</label>
+            <div class="tooltip">
+              <i class="gg-info"></i
+              ><span class="tooltiptext" style="width: 160px"
+                >Optional, for Beat Saber teams. Paste your ScoreSaber profile
+                link, e.g.
+                "https://scoresaber.com/&#8203;u/&#8203;3777651195905613"
+              </span>
+            </div>
+          </div>
+          <input type="text" name="scoresaber" id="scTag" />
+        </fieldset>
+      </form>
+      <div>
+        <input form="assignForm" type="submit" value="Save" />
+        <input form="assignForm" type="reset" value="Cancel" />
+      </div>
+    </aside>
+  </body>
+</html>

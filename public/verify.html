@@ -1,0 +1,141 @@
+<html>
+  <head>
+    <script src="js/es.js"></script>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.png" />
+    <title>CVRE Roster | Verifying Players</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/stylesheets/universal.css" />
+    <link rel="stylesheet" href="/stylesheets/normalize.css" />
+    <script src="js/sidebars.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div id="menuButton" class="autoCursor">
+        <i class="gg-menu"></i>
+      </div>
+      <img src="/assets/CVRE.png" alt="CVRE Logo" />
+      <div id="profileButton"></div>
+    </header>
+    <nav id="leftBar"></nav>
+    <nav id="rightBar"></nav>
+    <main>
+      <div class="filterNav">
+        <button id="all">All</button>
+        <button id="awaiting">Awaiting Submission</button
+        ><button id="review">Awaiting Review</button
+        ><button id="verified">Verified</button>
+      </div>
+      <section id="playerList">
+        <card class="skeleton"> </card>
+      </section>
+    </main>
+    <script>
+      let q = null
+
+      function get() {
+        if (q || q === 0) {
+          axios
+            .get(`/api/players?verify=${q}`)
+            .then((res) => renderList(res.data))
+        } else {
+          axios.get('/api/players').then((res) => renderList(res.data))
+        }
+      }
+
+      document.getElementById('all').addEventListener('click', (e) => {
+        q = null
+        get()
+      })
+      document.getElementById('awaiting').addEventListener('click', (e) => {
+        q = 0
+        get()
+      })
+      document.getElementById('review').addEventListener('click', (e) => {
+        q = 1
+        get()
+      })
+      document.getElementById('verified').addEventListener('click', (e) => {
+        q = 2
+        get()
+      })
+
+      function renderList(playerArr) {
+        if (playerArr.length === 0) {
+          uhtml.render(
+            document.getElementById('playerList'),
+            uhtml.html`<card><div class='autoCursor'><p>No players in this category.</p></div></card>`
+          )
+        } else {
+          uhtml.render(
+            document.getElementById('playerList'),
+            uhtml.html`${Object.values(playerArr).map(
+              (player) => uhtml.html`<card>
+                            <div onclick=${() => toggleDrawer(player._id)}>
+                              <p>${
+                                player.username +
+                                '#' +
+                                ('0000' + player.discriminator).slice(-4)
+                              }</p>
+                              <i class='gg-chevron-right'></i>
+                            </div>
+                            <div id=${player._id}>
+                                <ul>
+                                  <li><span>Captain:</span>&nbsp;&nbsp;&nbsp;${
+                                    player.captain.username +
+                                    '#' +
+                                    (
+                                      '0000' + player.captain.discriminator
+                                    ).slice(-4)
+                                  }</li>
+                                    <li><span>Name:</span>&nbsp;&nbsp;&nbsp;&nbsp;${
+                                      player.name
+                                    }</li>
+                                    <li><span>School:</span>&nbsp;&nbsp;&nbsp;&nbsp;${
+                                      player.school
+                                    }</li>
+                                    <li><span>Verified:</span>&nbsp;&nbsp;&nbsp;&nbsp;${() => {
+                                      if (player.verified === 2) {
+                                        return 'Verified'
+                                      } else if (player.verified === 1) {
+                                        return 'Pending Review'
+                                      } else if (player.verified === 0) {
+                                        return 'Awaiting Proof of Enrollment'
+                                      } else if (player.verified === -1) {
+                                        return 'Proof of Enrollment Denied, Awaiting Alternative'
+                                      }
+                                    }}</li>
+                                </ul>
+                                ${
+                                  player.verification
+                                    ? uhtml.html`<a href=${
+                                        '/api/players/' +
+                                        player.verification?.path
+                                      } target='_blank'>Verification (opens to new tab)</a>`
+                                    : uhtml.html``
+                                }
+      <button onclick=${() => approvePlayer(player._id)}>Approve</button>
+      <button onclick=${() => denyPlayer(player._id)}>Deny</button>
+                            </div>
+                        </card>`
+            )}`
+          )
+        }
+      }
+
+      get()
+
+      function approvePlayer(playerID) {
+        axios({ method: 'get', url: `/api/verify/${playerID}/2` }).then(() => {
+          get()
+        })
+      }
+
+      function denyPlayer(playerID) {
+        axios({ method: 'get', url: `/api/verify/${playerID}/-1` }).then(() => {
+          get()
+        })
+      }
+    </script>
+  </body>
+</html>

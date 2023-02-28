@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="js/es.js"></script>
+    <link rel="icon" type="image/x-icon" href="/assets/favicon.png" />
+    <title>CVRE Roster | Managing Players</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8" />
+    <link rel="stylesheet" href="/stylesheets/universal.css" />
+    <link rel="stylesheet" href="/stylesheets/normalize.css" />
+    <script src="js/sidebars.js" defer></script>
+    <script src="js/players.js" defer></script>
+  </head>
+  <body>
+    <header>
+      <div id="menuButton" class="autoCursor">
+        <i class="gg-menu"></i>
+      </div>
+      <img src="/assets/CVRE.png" alt="CVRE Logo" />
+      <div id="profileButton"></div>
+    </header>
+    <nav id="leftBar"></nav>
+    <nav id="rightBar"></nav>
+    <main>
+      <section id="playerList">
+        <card class="skeleton"> </card>
+      </section>
+      <button id="newPlayer">Add new player...</button>
+    </main>
+    <aside id="playerDrawer">
+      <form id="playerForm">
+        <fieldset>
+          <label for="playerDiscord">Discord:</label>
+          <input type="search" id="playerDiscord" />
+          <select id="discordSel" name="_id" required>
+            <option value="">Search for CVRE member...</option>
+          </select>
+        </fieldset>
+        <fieldset>
+          <div>
+            <label for="playerName">Name:</label>
+            <div class="tooltip">
+              <i class="gg-info"></i
+              ><span class="tooltiptext"
+                >Player's first and last name, must match verification.</span
+              >
+            </div>
+          </div>
+          <input type="text" name="name" id="playerName" required />
+          <label for="playerSchool">School:</label>
+          <input type="text" name="school" id="playerSchool" required />
+          <div>
+            <label for="playerVerif">Enrollment Verification Photo/PDF:</label>
+            <div class="tooltip">
+              <i class="gg-info"></i
+              ><span class="tooltiptext"
+                >Accepts images and PDF files up to 8MB in size. Should show the
+                player's full name, school name, and proof of current term
+                enrollment.
+              </span>
+            </div>
+          </div>
+          <input
+            type="file"
+            name="verification"
+            id="playerVerif"
+            accept="image/*,.pdf"
+          />
+        </fieldset>
+      </form>
+      <div>
+        <input form="playerForm" type="submit" value="Save" />
+        <input form="playerForm" type="reset" value="Cancel" />
+      </div>
+    </aside>
+    <script>
+      let discordCache = []
+      let typingTimer
+      const doneTypingInterval = 500 // ms
+      const playerDiscord = document.getElementById('playerDiscord')
+      const re = /^[^#]*/
+
+      playerDiscord.addEventListener('keyup', () => {
+        clearTimeout(typingTimer)
+        if (playerDiscord.value) {
+          typingTimer = setTimeout(doneTyping, doneTypingInterval)
+        }
+      })
+
+      function doneTyping() {
+        axios({
+          method: 'get',
+          url: `/api/players/search?query=${playerDiscord.value.match(re)[0]}`
+        }).then((res) => {
+          if (Object.keys(res.data).length === 0) {
+            uhtml.render(
+              document.getElementById('discordSel'),
+              uhtml.html`<option value=''>Found no users with this name!</option>`
+            )
+          } else {
+            discordCache = res.data
+            uhtml.render(
+              document.getElementById('discordSel'),
+              uhtml.html`${res.data.map(
+                (result) =>
+                  uhtml.html`<option value='${result[0]}'>${
+                    (result[3] ? result[3] : result[1]) + '#' + result[2]
+                  }</option>`
+              )}`
+            )
+          }
+        })
+      }
+    </script>
+  </body>
+</html>

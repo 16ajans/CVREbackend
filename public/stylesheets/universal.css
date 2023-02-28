@@ -1,0 +1,510 @@
+/* icons */
+
+.gg-menu {
+  transform: scale(var(--ggs, 2));
+  color: #703893;
+}
+
+.gg-menu,
+.gg-menu::after,
+.gg-menu::before {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  width: 20px;
+  height: 2px;
+  border-radius: 3px;
+  background: currentColor;
+}
+
+.gg-menu::after,
+.gg-menu::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+}
+
+.gg-menu::after {
+  top: 6px;
+}
+
+.gg-profile,
+.gg-profile::after,
+.gg-profile::before {
+  display: block;
+  box-sizing: border-box;
+  border: 2px solid;
+  border-radius: 100px;
+}
+
+.gg-profile {
+  overflow: hidden;
+  transform: scale(var(--ggs, 2));
+  width: 22px;
+  height: 22px;
+  position: relative;
+  color: white;
+}
+
+.gg-profile::after,
+.gg-profile::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 8px;
+  height: 8px;
+}
+
+.gg-profile::after {
+  border-radius: 200px;
+  top: 11px;
+  left: 0px;
+  width: 18px;
+  height: 18px;
+}
+
+.gg-chevron-right {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: scale(var(--ggs, 1));
+  width: 22px;
+  height: 22px;
+  border: 2px solid transparent;
+  border-radius: 100px;
+  transition: 0.25s;
+}
+
+.gg-chevron-right::after {
+  content: '';
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-bottom: 2px solid;
+  border-right: 2px solid;
+  transform: rotate(-45deg);
+  right: 6px;
+  top: 4px;
+  transition: 0.25s;
+}
+
+.turny {
+  transform: rotate(90deg);
+}
+
+.gg-info {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: scale(var(--ggs, 1));
+  width: 20px;
+  height: 20px;
+  border: 2px solid;
+  border-radius: 40px;
+}
+
+.gg-info::after,
+.gg-info::before {
+  content: '';
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  border-radius: 3px;
+  width: 2px;
+  background: currentColor;
+  left: 7px;
+}
+
+.gg-info::after {
+  bottom: 2px;
+  height: 8px;
+}
+
+.gg-info::before {
+  height: 2px;
+  top: 2px;
+}
+
+.gg-danger {
+  box-sizing: border-box;
+  position: relative;
+  display: block;
+  transform: scale(var(--ggs, 0.8));
+  width: 20px;
+  height: 20px;
+  border: 2px solid;
+  border-radius: 40px;
+  color: #ff0000;
+}
+
+.gg-danger::after,
+.gg-danger::before {
+  content: '';
+  display: block;
+  box-sizing: border-box;
+  position: absolute;
+  border-radius: 3px;
+  width: 2px;
+  background: currentColor;
+  left: 7px;
+  color: #ff0000;
+}
+
+.gg-danger::after {
+  top: 2px;
+  height: 8px;
+}
+
+.gg-danger::before {
+  height: 2px;
+  bottom: 2px;
+}
+
+/* other */
+
+header {
+  height: 5em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #703893;
+}
+header > img {
+  max-height: 80%;
+  width: auto;
+}
+header > div {
+  height: inherit;
+  aspect-ratio: 1;
+  display: inherit;
+  justify-content: space-around;
+  align-items: inherit;
+  cursor: pointer;
+}
+img.rounded {
+  object-fit: cover;
+  border-radius: 50%;
+  height: 3em;
+  aspect-ratio: 1;
+}
+
+html,
+body {
+  font-family: sans-serif;
+  height: 100%;
+}
+
+#leftBar,
+#rightBar {
+  position: fixed;
+  top: 5em;
+  background-color: gray;
+  overflow: hidden;
+  transition: 0.25s;
+  white-space: nowrap;
+}
+#leftBar {
+  z-index: 2;
+  padding-top: 1.5em;
+  left: 0;
+  width: 0;
+  height: 100%;
+}
+#rightBar {
+  z-index: 3;
+  right: 0;
+  max-height: 0;
+  text-align: right;
+  margin: 0.25em;
+  margin-top: 0;
+  border-radius: 0 0 6px 6px;
+}
+nav > * {
+  display: block;
+  padding: 0.5em 2em 0.5em 2em;
+  text-decoration: none;
+  transition: 0.15s;
+  margin: 0px;
+  color: black;
+}
+nav > a {
+  font-weight: bold;
+}
+nav > a:hover {
+  color: darkslategray;
+}
+#leftBar > * {
+  font-size: 1.5em;
+}
+
+main {
+  padding: 0.5em;
+  margin-top: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 480px;
+}
+
+aside {
+  max-height: 0;
+  position: fixed;
+  z-index: 1;
+  bottom: 0;
+  background-color: lightgray;
+  transition: 0.25s;
+  left: 50%;
+  transform: translate(-50%, 0);
+  width: 100%;
+}
+aside > div {
+  width: 100%;
+  margin-bottom: 1em;
+  display: flex;
+  justify-content: center;
+  gap: 4px;
+}
+form {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  margin: 1em;
+}
+fieldset {
+  width: 15em;
+  display: flex;
+  flex-flow: column nowrap;
+}
+fieldset > div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+fieldset > *:not(input[type='search']) {
+  margin-bottom: 0.5em;
+}
+input[type='number'] {
+  width: 2em;
+}
+
+card {
+  min-height: 3.15em;
+  display: block;
+  border: solid;
+  margin-bottom: 1em;
+  break-inside: avoid;
+  width: 100%;
+}
+card > div:first-child {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5em;
+  cursor: pointer;
+}
+card > div:nth-child(2) {
+  max-height: 0px;
+  box-sizing: border-box;
+  overflow-y: hidden;
+  transition: 0.25s;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+card p,
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0.5em;
+  text-align: left;
+}
+card button {
+  margin: 0.5em;
+}
+.logo {
+  float: right;
+  min-width: 4.5em;
+  max-height: 4.5em;
+  object-fit: contain;
+  margin-right: 0.5em;
+}
+.wrapper:has(.logo) {
+  align-items: flex-start;
+}
+
+.skeleton {
+  animation: skeleton-loading 0.5s linear infinite alternate;
+  border-color: gray;
+  break-inside: avoid;
+}
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 80%);
+  }
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
+
+span {
+  font-weight: bold;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  width: fit-content;
+}
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -115px;
+  overflow-wrap: break-word;
+}
+.tooltip .tooltiptext::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 115px;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
+
+.autoCursor {
+  cursor: auto !important;
+}
+
+.WIP {
+  position: relative;
+  background-color: white;
+  font-weight: bold;
+}
+
+.WIP:before {
+  content: '';
+  position: absolute;
+  top: -10px;
+  bottom: -10px;
+  left: -10px;
+  right: -10px;
+  z-index: -1;
+  background: repeating-linear-gradient(
+    45deg,
+    yellow,
+    yellow 10px,
+    black 10px,
+    black 20px
+  );
+}
+
+.wrapper,
+.warn {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.top {
+  border-bottom: solid;
+  margin-bottom: 0.25em;
+}
+.shimmy {
+  margin-top: 0.5em;
+}
+.scootch {
+  margin-bottom: 0.5em;
+}
+.smalltop {
+  border-bottom: solid 1.5px;
+  margin-bottom: 0.25em;
+}
+.spaaace {
+  margin-bottom: 4em;
+  break-inside: avoid;
+}
+.right {
+  text-align: right;
+}
+card > .right {
+  margin-right: 0.5em;
+}
+h2,
+h3,
+h4 {
+  margin: 0;
+}
+h3 {
+  color: dimgray;
+}
+card > div > h3 {
+  color: black;
+}
+h4 {
+  font-weight: normal;
+}
+.warn {
+  margin-top: -0.75em;
+  margin-bottom: 1em;
+  margin-right: 0.5em;
+  padding-right: 3px;
+  align-items: normal;
+  color: #ff0000;
+}
+.warnLogo {
+  margin-left: 5em;
+}
+card:has(+ .warn) {
+  border-color: #ff0000;
+}
+.underlined {
+  border-bottom: #ff0000 solid 1.5px;
+  align-items: end;
+}
+
+.filterNav {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1em;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+table td,
+table th {
+  border: 1px solid black;
+  padding: 0.25em;
+}
+table tr:first-child th {
+  border-top: 0;
+}
+table tr:last-child td {
+  border-bottom: 0;
+}
+table tr td:first-child,
+table tr th:first-child {
+  border-left: 0;
+}
+table tr td:last-child,
+table tr th:last-child {
+  border-right: 0;
+}
+.tableWrapper {
+  overflow-x: auto;
+}
