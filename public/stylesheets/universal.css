@@ -435,7 +435,7 @@ span {
 }
 .spaaace {
   margin-bottom: 4em;
-  break-inside: avoid;
+  /* break-inside: avoid; */
 }
 .right {
   text-align: right;
