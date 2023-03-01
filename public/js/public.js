@@ -2,10 +2,16 @@
 
 function genPlayers (players) {
   return Object.values(players).map((player) => {
-    if (player.player.verified === 2) {
-      return uhtml.html`<li class="wrapper">${player.gamertag}</li>`
+    let innerbit
+    if (player.scoresaber && userCache.sc) {
+      innerbit = uhtml.html`<a target='_blank' href=${player.scoresaber}>${player.gamertag}</a>`
     } else {
-      return uhtml.html`<li class="wrapper underlined">${player.gamertag}<div class="tooltip"><i class="gg-danger"></i><span class="tooltiptext">Player isn't verified!</span></div></li>`
+      innerbit = uhtml.html`${player.gamertag}`
+    }
+    if (player.player.verified === 2) {
+      return uhtml.html`<li class="wrapper">${innerbit}</li>`
+    } else {
+      return uhtml.html`<li class="wrapper underlined">${innerbit}<div class="tooltip"><i class="gg-danger"></i><span class="tooltiptext">Player isn't verified!</span></div></li>`
     }
   })
 }

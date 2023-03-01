@@ -11,6 +11,7 @@ import intersect from 'just-intersect'
 
 const captainRoleIDs = process.env.CAPTAIN_ROLE_IDS.split(',')
 const adminRoleID = process.env.ADMIN_ROLE_ID
+const scoresaberRoleID = process.env.SCORESABER_ROLE_ID
 
 export const userAuth = (req, res, next) => {
   if (req.session.user) next()
@@ -94,6 +95,9 @@ router.get('/me', userAuth, async (req, res) => {
   delete clean.auth
   if (clean.roles.includes(adminRoleID)) {
     clean.admin = true
+  }
+  if (clean.roles.includes(scoresaberRoleID)) {
+    clean.sc = true
   }
   if (intersect(clean.roles, captainRoleIDs) > 0) {
     clean.captain = true

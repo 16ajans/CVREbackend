@@ -239,6 +239,9 @@ nav > a:hover {
 #leftBar > * {
   font-size: 1.5em;
 }
+a {
+  text-decoration: none;
+}
 
 main {
   padding: 0.5em;
