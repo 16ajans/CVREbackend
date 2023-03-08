@@ -108,7 +108,7 @@ router
 router.use(
   '/verifications',
   adminAuth,
-  express.static('verifications', { setHeaders, maxAge: '7 days' })
+  express.static('verifications', { setHeaders, maxAge: '7d' })
 )
 
 function setHeaders (res, path) {

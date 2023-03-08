@@ -143,7 +143,7 @@ router
     }).populate('division', 'playerRole')
   })
 
-router.use('/logos', express.static('logos', { setHeaders, maxAge: '7 days' }))
+router.use('/logos', express.static('logos', { setHeaders, maxAge: '1y' }))
 
 function setHeaders (res, path) {
   res.set({

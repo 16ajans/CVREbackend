@@ -32,7 +32,7 @@ app.use('/auth', auth)
 app.use(
   express.static('public', {
     extensions: ['html', 'htm'],
-    maxAge: '1 day'
+    maxAge: '7d'
   })
 )
 
