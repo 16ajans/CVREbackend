@@ -18,9 +18,11 @@ profileButton.addEventListener('click', (e) => {
 function navvable () {
   menuButton.addEventListener('click', (e) => {
     if (leftBar.style.width === '0px') {
+      document.body.style.overflowY = 'hidden'
       leftBar.style.width = '100%'
       rightBar.style.maxHeight = '0px'
     } else {
+      document.body.style.overflowY = ''
       leftBar.style.width = '0px'
     }
   })
