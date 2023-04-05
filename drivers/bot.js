@@ -15,9 +15,6 @@ client.once(Events.ClientReady, async (c) => {
   // console.log(guild.members.me.permissions)
 })
 
-// TODO: watch gateway for captain and player role changes
-// propogate to db and set verified/approved status accordinnpmgly
-
 export async function addRole (userSnowflake, roleSnowflake) {
   return await guild.members.addRole({
     user: userSnowflake,
@@ -71,6 +68,13 @@ export async function searchGuildMember (query) {
       ]
     })
   }
+}
+
+export function propgateRoleChanges (division) {
+  // get list of users who should have role
+  // get list of users who *do* have role
+  // give roles to users unique to list a
+  // take roles from users unique to list b?
 }
 
 client.login(process.env.DISCORD_BOT_TOKEN)
