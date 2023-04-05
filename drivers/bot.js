@@ -14,7 +14,7 @@ client.once(Events.ClientReady, async (c) => {
   // })
   // console.log(guild.members.me.permissions)
 
-  getRoleState(await getRoleTemplate())
+  applyRoleTemplate(await getRoleTemplate())
 })
 
 export async function addRole (userSnowflake, roleSnowflake) {
@@ -23,12 +23,12 @@ export async function addRole (userSnowflake, roleSnowflake) {
     role: roleSnowflake
   })
 }
-export async function removeRole (userSnowflake, roleSnowflake) {
-  return await guild.members.removeRole({
-    user: userSnowflake,
-    role: roleSnowflake
-  })
-}
+// export async function removeRole (userSnowflake, roleSnowflake) {
+//   return await guild.members.removeRole({
+//     user: userSnowflake,
+//     role: roleSnowflake
+//   })
+// }
 export async function fetchMemberRoles (userSnowflake) {
   const member = await guild.members.fetch(userSnowflake)
   return member._roles
@@ -109,11 +109,12 @@ export function getRoleTemplate () {
   ])
 }
 
-export function getRoleState (roleTemplate) {
-  roleTemplate.forEach((preRole) => {
-    guild.roles
-      .fetch(preRole._id[0], { force: true })
-      .then((role) => console.log(role?.members))
+export function applyRoleTemplate (roleTemplate) {
+  roleTemplate.forEach((role) => {
+    role.players.forEach((player) => {
+      // addRole(player._id, role._id[0])
+      console.log(`Adding role ${role._id[0]} to member ${player._id}`)
+    })
   })
 }
 
