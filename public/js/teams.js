@@ -22,9 +22,9 @@ function renderList () {
     uhtml.render(
       teamList,
       uhtml.html`${Object.values(res.data).map(
-        (team) => uhtml.html`<card>
+        (team) => uhtml.html`<card class=${team.division ? '' : 'archived'}>
                 <div onclick=${() => toggleDrawer(team._id)}>
-                  <p>${team.name}</p>
+                  <p>${(team.division ? '' : '(Archived) ') + team.name}</p>
                   <i class='gg-chevron-right'></i>
                 </div>
                 <div id=${team._id}>
@@ -45,9 +45,11 @@ function renderList () {
                           }</li>`
                         : ''
                     }
-                        <li><span>Division:</span>&nbsp;&nbsp;&nbsp;&nbsp;${
-                          team.division.name
-                        }</li>
+                    ${
+                      team.division
+                        ? uhtml.html`<li><span>Division:</span>&nbsp;&nbsp;&nbsp;&nbsp;${team.division.name}</li>`
+                        : ''
+                    }
                         <li><span>School/Region:</span>&nbsp;&nbsp;&nbsp;&nbsp;${
                           team.locale
                         }</li>

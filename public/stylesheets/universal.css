@@ -300,6 +300,9 @@ card {
   break-inside: avoid;
   width: 100%;
 }
+card.archived {
+  border-color: gray;
+}
 card > div:first-child {
   display: flex;
   flex-direction: row;
