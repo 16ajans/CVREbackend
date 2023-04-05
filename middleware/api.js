@@ -5,7 +5,6 @@ import { router as teams } from './api/teams.js'
 import { router as players } from './api/players.js'
 import { router as verify } from './api/verify.js'
 import { Division, Team } from '../drivers/db.js'
-import { getRoleTemplate } from '../drivers/bot.js'
 
 // TODO: error handling with middleware, filter queries
 // TODO: populate option?
@@ -57,10 +56,6 @@ router.get('/stream', (req, res) => {
       res.json(agg)
     }
   )
-})
-
-router.get('/roles', async (req, res) => {
-  res.json(await getRoleTemplate())
 })
 
 router.get('/public', (req, res) => {
