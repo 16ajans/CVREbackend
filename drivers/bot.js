@@ -1,5 +1,6 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js'
 import { Team } from './db.js'
+import { CronJob } from 'cron'
 
 // TODO: understand if i need gateway intents
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
@@ -14,7 +15,8 @@ client.once(Events.ClientReady, async (c) => {
   // })
   // console.log(guild.members.me.permissions)
 
-  applyRoleTemplate(await getRoleTemplate())
+  job.start()
+  console.log(`Job started with frequency ${process.env.ROLE_CRON}`)
 })
 
 export async function addRole (userSnowflake, roleSnowflake) {
@@ -109,14 +111,23 @@ export function getRoleTemplate () {
   ])
 }
 
-// TODO: actually check before assigning, place on schedule
 export function applyRoleTemplate (roleTemplate) {
   roleTemplate.forEach((role) => {
     role.players.forEach((player) => {
-      addRole(player._id, role._id[0])
-      // console.log(`Adding role ${role._id[0]} to member ${player._id}`)
+      guild.members.fetch(player._id).then((member) => {
+        if (!member._roles.includes(role._id[0]) && player.verified === 2) {
+          addRole(player._id, role._id[0])
+          // console.log(`Adding role ${role._id[0]} to member ${player._id}`)
+          // } else {
+          //   console.log(`Passed over member ${player._id}`)
+        }
+      })
     })
   })
 }
+
+const job = new CronJob(process.env.ROLE_CRON, async function () {
+  applyRoleTemplate(await getRoleTemplate())
+})
 
 client.login(process.env.DISCORD_BOT_TOKEN)
