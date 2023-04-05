@@ -109,6 +109,7 @@ export function getRoleTemplate () {
   ])
 }
 
+// TODO: actually check before assigning, place on schedule
 export function applyRoleTemplate (roleTemplate) {
   roleTemplate.forEach((role) => {
     role.players.forEach((player) => {
