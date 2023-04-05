@@ -164,7 +164,7 @@ function populateDivSel (divisionID) {
           (result) =>
             uhtml.html`<option value='${result._id}'>${result.name}</option>`
         )}</optgroup>
-        <optgroup label='Closed' disabled>
+        <optgroup label='Closed' .disabled=${!userCache.admin}>
         ${closed.map(
           (result) =>
             uhtml.html`<option value='${result._id}'>${result.name}</option>`
@@ -199,7 +199,9 @@ function editTeam (_id) {
   teamName.value = team.name
   teamLocale.value = team.locale
 
-  divSel.disabled = true
+  if (!userCache.admin) {
+    divSel.disabled = true
+  }
 
   teamDrawer.style.maxHeight = '80%'
   teamName.focus()
