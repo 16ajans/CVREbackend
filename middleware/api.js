@@ -58,6 +58,52 @@ router.get('/stream', (req, res) => {
   )
 })
 
+router.get('/roles', (req, res) => {
+  Team.aggregate(
+    [
+      {
+        $lookup: {
+          from: 'divisions',
+          let: { divID: { $toObjectId: '$division' } },
+          pipeline: [
+            { $match: { $expr: { $eq: ['$_id', '$$divID'] } } },
+            { $project: { playerRole: true } }
+          ],
+          as: 'division'
+        }
+      },
+      { $unwind: { path: '$division' } },
+      { $unwind: { path: '$players' } },
+      {
+        $replaceRoot: {
+          newRoot: {
+            role: '$division.playerRole',
+            player: '$players.player'
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: 'players',
+          localField: 'player',
+          foreignField: '_id',
+          pipeline: [{ $project: { verified: true } }],
+          as: 'player'
+        }
+      },
+      { $unwind: { path: '$player' } },
+      { $group: { _id: '$role', players: { $push: '$player' } } }
+    ],
+    (err, agg) => {
+      if (err) {
+        res.status(500).send(err)
+        return
+      }
+      res.json(agg)
+    }
+  )
+})
+
 router.get('/public', (req, res) => {
   Division.find({}, async (err, docs) => {
     if (err) {
