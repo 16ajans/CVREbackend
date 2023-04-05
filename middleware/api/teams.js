@@ -80,6 +80,16 @@ router
           if (err) res.status(500).send(err)
           res.sendStatus(200)
         })
+      } else if (req.session.user.roles.includes(process.env.ADMIN_ROLE_ID)) {
+        delete req.body.captain
+        Object.assign(doc, req.body)
+        if (req.file) {
+          doc.logo = req.file
+        }
+        doc.save((err) => {
+          if (err) res.status(500).send(err)
+          res.sendStatus(200)
+        })
       } else {
         if (err) res.sendStatus(403)
       }
