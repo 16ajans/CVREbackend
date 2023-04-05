@@ -1,5 +1,4 @@
 import express from 'express'
-import { addRole, removeRole } from '../../drivers/bot.js'
 import { Team, Assignment } from '../../drivers/db.js'
 import { captainAuth } from '../auth.js'
 import multer from 'multer'
@@ -109,12 +108,6 @@ router.route('/:teamID/assignments').post(captainAuth, (req, res) => {
         return
       }
       res.sendStatus(200)
-      const index = doc.players.findIndex((assign) => {
-        return assign.player._id === req.body.player
-      })
-      if (doc.players[index].player.verified === 2) {
-        addRole(req.body.player, doc.division.playerRole[0])
-      }
     })
   }).populate('division', 'playerRole')
 })
@@ -127,7 +120,6 @@ router
         return assign._id.toString() === req.params.assignmentID
       })
       if (index > -1) {
-        const playerID = doc.players[index].player
         doc.players.splice(index, 1)
         doc.save((err) => {
           if (err) {
@@ -135,7 +127,6 @@ router
             return
           }
           res.sendStatus(200)
-          removeRole(playerID, doc.division.playerRole[0])
         })
       } else {
         res.status(500).send('No such assignment.')
