@@ -1,4 +1,3 @@
-import 'dotenv/config' // FIXME: temporary for testing
 import { Client, Events, GatewayIntentBits } from 'discord.js'
 
 // TODO: understand if i need gateway intents
@@ -68,13 +67,6 @@ export async function searchGuildMember (query) {
       ]
     })
   }
-}
-
-export function propgateRoleChanges (division) {
-  // get list of users who should have role
-  // get list of users who *do* have role
-  // give roles to users unique to list a
-  // take roles from users unique to list b?
 }
 
 client.login(process.env.DISCORD_BOT_TOKEN)

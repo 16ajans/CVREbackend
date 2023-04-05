@@ -1,6 +1,6 @@
 import express from 'express'
 import { addRole, removeRole } from '../../drivers/bot.js'
-import { Player, Team } from '../../drivers/db.js'
+import { Player, Team, Division } from '../../drivers/db.js'
 import { adminAuth } from '../auth.js'
 
 export const router = express.Router()
@@ -26,6 +26,17 @@ function removeRoles (playerID) {
   })
     .select('division')
     .populate('division', 'playerRole')
+}
+
+export function propgateRoleChanges (divisionID) {
+  // Division.findById(divisionID, (err, doc) => {
+  //   if (err) console.error(err)
+  //   console.log(doc)
+  // })
+  // get list of users who should have role
+  // get list of users who *do* have role
+  // give roles to users unique to list a
+  // take roles from users unique to list b?
 }
 
 router.route('/:playerID/:op').get(adminAuth, (req, res) => {
