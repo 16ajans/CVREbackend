@@ -112,8 +112,8 @@ export function getRoleTemplate () {
 export function applyRoleTemplate (roleTemplate) {
   roleTemplate.forEach((role) => {
     role.players.forEach((player) => {
-      // addRole(player._id, role._id[0])
-      console.log(`Adding role ${role._id[0]} to member ${player._id}`)
+      addRole(player._id, role._id[0])
+      // console.log(`Adding role ${role._id[0]} to member ${player._id}`)
     })
   })
 }
