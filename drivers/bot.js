@@ -1,4 +1,5 @@
 import { Client, Events, GatewayIntentBits } from 'discord.js'
+import { Team } from './db.js'
 
 // TODO: understand if i need gateway intents
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
@@ -12,6 +13,8 @@ client.once(Events.ClientReady, async (c) => {
   //   DMChannel.send('bot is up!')
   // })
   // console.log(guild.members.me.permissions)
+
+  getRoleState(await getRoleTemplate())
 })
 
 export async function addRole (userSnowflake, roleSnowflake) {
@@ -67,6 +70,51 @@ export async function searchGuildMember (query) {
       ]
     })
   }
+}
+
+export function getRoleTemplate () {
+  return Team.aggregate([
+    {
+      $lookup: {
+        from: 'divisions',
+        let: { divID: { $toObjectId: '$division' } },
+        pipeline: [
+          { $match: { $expr: { $eq: ['$_id', '$$divID'] } } },
+          { $project: { playerRole: true } }
+        ],
+        as: 'division'
+      }
+    },
+    { $unwind: { path: '$division' } },
+    { $unwind: { path: '$players' } },
+    {
+      $replaceRoot: {
+        newRoot: {
+          role: '$division.playerRole',
+          player: '$players.player'
+        }
+      }
+    },
+    {
+      $lookup: {
+        from: 'players',
+        localField: 'player',
+        foreignField: '_id',
+        pipeline: [{ $project: { verified: true } }],
+        as: 'player'
+      }
+    },
+    { $unwind: { path: '$player' } },
+    { $group: { _id: '$role', players: { $push: '$player' } } }
+  ])
+}
+
+export function getRoleState (roleTemplate) {
+  roleTemplate.forEach((preRole) => {
+    guild.roles
+      .fetch(preRole._id[0], { force: true })
+      .then((role) => console.log(role?.members))
+  })
 }
 
 client.login(process.env.DISCORD_BOT_TOKEN)

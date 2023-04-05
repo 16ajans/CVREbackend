@@ -5,6 +5,7 @@ import { router as teams } from './api/teams.js'
 import { router as players } from './api/players.js'
 import { router as verify } from './api/verify.js'
 import { Division, Team } from '../drivers/db.js'
+import { getRoleTemplate } from '../drivers/bot.js'
 
 // TODO: error handling with middleware, filter queries
 // TODO: populate option?
@@ -58,50 +59,8 @@ router.get('/stream', (req, res) => {
   )
 })
 
-router.get('/roles', (req, res) => {
-  Team.aggregate(
-    [
-      {
-        $lookup: {
-          from: 'divisions',
-          let: { divID: { $toObjectId: '$division' } },
-          pipeline: [
-            { $match: { $expr: { $eq: ['$_id', '$$divID'] } } },
-            { $project: { playerRole: true } }
-          ],
-          as: 'division'
-        }
-      },
-      { $unwind: { path: '$division' } },
-      { $unwind: { path: '$players' } },
-      {
-        $replaceRoot: {
-          newRoot: {
-            role: '$division.playerRole',
-            player: '$players.player'
-          }
-        }
-      },
-      {
-        $lookup: {
-          from: 'players',
-          localField: 'player',
-          foreignField: '_id',
-          pipeline: [{ $project: { verified: true } }],
-          as: 'player'
-        }
-      },
-      { $unwind: { path: '$player' } },
-      { $group: { _id: '$role', players: { $push: '$player' } } }
-    ],
-    (err, agg) => {
-      if (err) {
-        res.status(500).send(err)
-        return
-      }
-      res.json(agg)
-    }
-  )
+router.get('/roles', async (req, res) => {
+  res.json(await getRoleTemplate())
 })
 
 router.get('/public', (req, res) => {
