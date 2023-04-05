@@ -24,7 +24,7 @@ function renderList () {
       uhtml.html`${Object.values(res.data).map(
         (team) => uhtml.html`<card class=${team.division ? '' : 'archived'}>
                 <div onclick=${() => toggleDrawer(team._id)}>
-                  <p>${(team.division ? '' : '(Archived) ') + team.name}</p>
+                  <p>${(team.division ? '' : 'Archived: ') + team.name}</p>
                   <i class='gg-chevron-right'></i>
                 </div>
                 <div id=${team._id}>
@@ -48,7 +48,7 @@ function renderList () {
                     ${
                       team.division
                         ? uhtml.html`<li><span>Division:</span>&nbsp;&nbsp;&nbsp;&nbsp;${team.division.name}</li>`
-                        : ''
+                        : uhtml.html`<br><li><span>This team was part of a division that no longer exists.</span></li><br>`
                     }
                         <li><span>School/Region:</span>&nbsp;&nbsp;&nbsp;&nbsp;${
                           team.locale
