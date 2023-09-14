@@ -38,11 +38,7 @@ function renderList () {
                     <ul>
                     ${
                       dispCaptain
-                        ? uhtml.html`<li><span>Captain:</span>&nbsp;&nbsp;&nbsp;&nbsp;${
-                            team.captain.username +
-                            '#' +
-                            ('0000' + team.captain.discriminator).slice(-4)
-                          }</li>`
+                        ? uhtml.html`<li><span>Captain:</span>&nbsp;&nbsp;&nbsp;&nbsp;${team.captain.username}</li>`
                         : ''
                     }
                     ${
@@ -76,11 +72,7 @@ function genPlayerTable (team) {
     </tr>
     ${team.players.map(
       (player) => uhtml.html`<tr>
-      <td>${
-        player.player.username +
-        '#' +
-        ('0000' + player.player.discriminator).slice(-4)
-      }</td>
+      <td>${player.player.username}</td>
       <td>${player.gamertag}</td>
       <td>${player.scoresaber}</td>
       <td><button onclick=${() =>
@@ -236,9 +228,7 @@ function populateAssignForm (teamID) {
       playerSel,
       uhtml.html`${Object.values(res.data).map(
         (player) =>
-          uhtml.html`<option value=${player._id}>${
-            player.username + '#' + ('0000' + player.discriminator).slice(-4)
-          }</option>`
+          uhtml.html`<option value=${player._id}>${player.username}</option>`
       )}`
     )
   })
@@ -265,13 +255,7 @@ function removeAssign (teamID, assignID) {
     return assign._id === assignID
   }).player
 
-  if (
-    confirm(
-      `Press OK to remove "${
-        player.username + '#' + ('0000' + player.discriminator).slice(-4)
-      }" from "${team.name}"`
-    )
-  ) {
+  if (confirm(`Press OK to remove "${player.username}" from "${team.name}"`)) {
     axios({
       method: 'delete',
       url: `/api/teams/${teamID}/assignments/${assignID}`

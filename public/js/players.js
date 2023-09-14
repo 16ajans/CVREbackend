@@ -24,24 +24,14 @@ function renderList () {
       uhtml.html`${Object.values(res.data).map(
         (player) => uhtml.html`<card>
                 <div onclick=${() => toggleDrawer(player._id)}>
-                  <p>${
-                    player.username +
-                    '#' +
-                    ('0000' + player.discriminator).slice(-4)
-                  }</p>
+                  <p>${player.username}</p>
                   <i class='gg-chevron-right'></i>
                 </div>
                 <div id=${player._id}>
                     <ul>
                         ${
                           dispCaptain
-                            ? uhtml.html`<li><span>Captain:</span>&nbsp;&nbsp;&nbsp;&nbsp;${
-                                player.captain.username +
-                                '#' +
-                                ('0000' + player.captain.discriminator).slice(
-                                  -4
-                                )
-                              }</li>`
+                            ? uhtml.html`<li><span>Captain:</span>&nbsp;&nbsp;&nbsp;&nbsp;${player.captain.username}</li>`
                             : ''
                         }
                         <li><span>Name:</span>&nbsp;&nbsp;&nbsp;&nbsp;${
@@ -141,9 +131,7 @@ function editPlayer (_id) {
   playerDiscord.disabled = true
   uhtml.render(
     discordSel,
-    uhtml.html`<option value='${player._id}'>${
-      player.username + '#' + ('0000' + player.discriminator).slice(-4)
-    }</option>`
+    uhtml.html`<option value='${player._id}'>${player.username}</option>`
   )
   discordCache = [[player._id, player.username, player.discriminator]]
 
@@ -156,13 +144,7 @@ function deletePlayer (_id) {
     return player._id === _id
   })
 
-  if (
-    confirm(
-      `Press OK to delete the player "${
-        player.username + '#' + ('0000' + player.discriminator).slice(-4)
-      }"`
-    )
-  ) {
+  if (confirm(`Press OK to delete the player "${player.username}"`)) {
     axios({
       method: 'delete',
       url: `/api/players/${encodeURIComponent(_id)}`

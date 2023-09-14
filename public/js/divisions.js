@@ -33,9 +33,7 @@ function renderList () {
                           div.open ? 'Yes' : 'No'
                         }</li>
                         <li><span>Admin Contact:</span>&nbsp;&nbsp;&nbsp;&nbsp;${
-                          (div.admin[3] ? div.admin[3] : div.admin[1]) +
-                          '#' +
-                          div.admin[2]
+                          div.admin[3] ? div.admin[3] : div.admin[1]
                         }</li>
                         <li><span>Minimum Players per Team:</span>&nbsp;&nbsp;&nbsp;&nbsp;${
                           div.minPlayers
@@ -150,7 +148,7 @@ function editDiv (_id) {
   uhtml.render(
     document.getElementById('adminDiscordSel'),
     uhtml.html`<option value=${div.admin[0]}>${
-      (div.admin[3] ? div.admin[3] : div.admin[1]) + '#' + div.admin[2]
+      div.admin[3] ? div.admin[3] : div.admin[1]
     }</option>`
   )
   document.getElementById('divMinPlayers').value = div.minPlayers
@@ -226,7 +224,7 @@ function doneTyping () {
         uhtml.html`${res.data.map(
           (result) =>
             uhtml.html`<option value='${result[0]}'>${
-              (result[3] ? result[3] : result[1]) + '#' + result[2]
+              result[3] ? result[3] : result[1]
             }</option>`
         )}`
       )

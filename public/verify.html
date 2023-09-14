@@ -73,21 +73,13 @@
             uhtml.html`${Object.values(playerArr).map(
               (player) => uhtml.html`<card>
                             <div onclick=${() => toggleDrawer(player._id)}>
-                              <p>${
-                                player.username +
-                                '#' +
-                                ('0000' + player.discriminator).slice(-4)
-                              }</p>
+                              <p>${player.username}</p>
                               <i class='gg-chevron-right'></i>
                             </div>
                             <div id=${player._id}>
                                 <ul>
                                   <li><span>Captain:</span>&nbsp;&nbsp;&nbsp;${
-                                    player.captain.username +
-                                    '#' +
-                                    (
-                                      '0000' + player.captain.discriminator
-                                    ).slice(-4)
+                                    player.captain.username
                                   }</li>
                                     <li><span>Name:</span>&nbsp;&nbsp;&nbsp;&nbsp;${
                                       player.name
