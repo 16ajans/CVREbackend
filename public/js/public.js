@@ -49,7 +49,7 @@ function renderList () {
             <h4>${div.desc}</h4>
             <h3 class="right shimmy scootch">Admin Contact:<br>${
               div.admin[3] ? div.admin[3] : div.admin[1]
-            }#${div.admin[2]}
+            }
             </h3>
         </div>
         <div>
@@ -73,7 +73,7 @@ function renderList () {
               </ul>
               <h4 class="right scootch">Captain Contact: ${
                 team.captain.username
-              }#${('0000' + team.captain.discriminator).slice(-4)}
+              }
                </h4>
            </card>
            </div>
