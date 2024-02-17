@@ -44,7 +44,7 @@ axios
     userCache = res.data
     uhtml.render(
       rightBar,
-      uhtml.html`<a href="/auth/logout">Log Out</a><p>Logged in as ${res.data.username}}</p><p id="authStatus"></p>`
+      uhtml.html`<a href="/auth/logout">Log Out</a><p>Logged in as ${res.data.username}</p><p id="authStatus"></p>`
     )
     // <a href="/auth/refresh">Refresh Cached Roles</a>
     let payload = uhtml.html``
