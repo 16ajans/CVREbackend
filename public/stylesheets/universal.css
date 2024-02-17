@@ -199,7 +199,7 @@ body {
 
 #leftBar,
 #rightBar {
-  position: fixed;
+  position: absolute;
   top: 5em;
   background-color: gray;
   overflow: hidden;
