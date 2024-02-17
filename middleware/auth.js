@@ -93,9 +93,6 @@ router.get('/logout', (req, res) => {
 router.get('/me', userAuth, async (req, res) => {
   const clean = Object.assign({}, req.session.user)
   delete clean.auth
-  if (clean._id.equals('144973321749004289')) { // hard overwrite for haazman - post removal of admin role
-    clean.admin = true
-  }
   if (clean.roles.includes(adminRoleID)) {
     clean.admin = true
   }
