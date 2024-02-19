@@ -331,7 +331,7 @@ card button {
 }
 .logo {
   float: right;
-  min-width: 4.5em;
+  max-width: 4.5em;
   max-height: 4.5em;
   object-fit: contain;
   margin-right: 0.5em;
