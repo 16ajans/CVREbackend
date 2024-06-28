@@ -5,25 +5,18 @@ const { Schema } = mongoose
 
 const userSchema = new Schema({
   _id: String, // discord snowflake
-  username: String,
-  discriminator: Number,
+  username: String, // unique uname
+  global_name: String, // display name
   avatar: String,
   roles: Array,
   auth: {
     type: Map,
     of: String
-  }
-})
-
-const playerSchema = new Schema({
-  _id: String, // discord snowflake
-  username: String,
-  discriminator: Number,
-  captain: {
-    type: String,
-    ref: 'User'
   },
-  verified: Number, // -1:denied, 0:none provided, 1:pending, 2:yes
+  state: {
+    type: String,
+    enum: ['awaiting', 'pending', 'accepted', 'manager']
+  },
 
   // sensitive info:
   name: String,
@@ -37,24 +30,30 @@ const playerSchema = new Schema({
 const assignmentSchema = new Schema({
   player: {
     type: String,
-    ref: 'Player'
+    ref: 'User'
   },
+  team: {
+    type: Schema.ObjectId,
+    ref: 'Team'
+  },
+  gamertag: String,
   scoresaber: String,
-  gamertag: String
+  state: {
+    type: String,
+    enum: ['pending', 'accepted']
+  }
 })
 
 const teamSchema = new Schema({
-  name: String, // name
-  captain: {
+  name: String,
+  owner: {
     type: String,
     ref: 'User'
   },
   division: {
-    type: String,
+    type: Schema.ObjectId,
     ref: 'Division'
   },
-  locale: String,
-  players: [assignmentSchema],
   logo: {
     type: Map,
     of: String
@@ -65,20 +64,22 @@ const divisionSchema = new Schema({
   name: String, // name, required
   game: String, // required
   open: Boolean, // required
-  admin: [String], // snowflake, username, discriminator, nickname
+  admin: {
+    type: String,
+    ref: 'User'
+  },
   desc: String,
   minPlayers: Number, // not negative
   maxPlayers: Number, // not negative
-  playerRole: [String] // snowflake, name
-  // captainRole: [String] // snowflake, name
+  playerRole: String, // role snowflake
+  captainRole: String // role snowflake
 })
 
-mongoose.set('strictQuery', false)
+mongoose.set('strictQuery', true)
 // TODO error handling
 mongoose.connect(process.env.MONGODB_URI)
 
 export const User = mongoose.model('User', userSchema)
-export const Player = mongoose.model('Player', playerSchema)
 export const Assignment = mongoose.model('Assignment', assignmentSchema)
 export const Team = mongoose.model('Team', teamSchema)
 export const Division = mongoose.model('Division', divisionSchema)
