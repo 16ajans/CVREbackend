@@ -2,7 +2,6 @@ import { Client, Events, GatewayIntentBits } from 'discord.js'
 import { Team } from './db.js'
 import { CronJob } from 'cron'
 
-// TODO: understand if i need gateway intents
 const client = new Client({ intents: [GatewayIntentBits.Guilds] })
 let guild
 
@@ -74,12 +73,12 @@ export async function searchGuildMember (query) {
   }
 }
 
-export function getRoleTemplate () {
+export function getRoleTemplate () { // TODO: what the fuck
   return Team.aggregate([
     {
       $lookup: {
         from: 'divisions',
-        let: { divID: { $toObjectId: '$division' } },
+        let: { divID: '$division' },
         pipeline: [
           { $match: { $expr: { $eq: ['$_id', '$$divID'] } } },
           { $project: { playerRole: true } }

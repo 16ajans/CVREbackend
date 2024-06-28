@@ -1,9 +1,11 @@
 import express from 'express'
-import { Team, Assignment } from '../../drivers/db.js'
-import { captainAuth } from '../auth.js'
+import { Team } from '../../drivers/db.js'
+import { userAuth } from '../auth.js'
 import multer from 'multer'
 import { mkdir } from 'node:fs/promises'
 import { nanoid } from 'nanoid/non-secure'
+
+const ADMIN_ROLE_ID = process.env.ADMIN_ROLE_ID
 
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {
@@ -29,10 +31,13 @@ const upload = multer({ storage, fileFilter, limits })
 
 router
   .route('/')
-  .get(captainAuth, (req, res) => {
+  .get((req, res) => {
     const query = {}
-    if (!req.session.user.roles.includes(process.env.ADMIN_ROLE_ID)) {
-      query.captain = req.session.user._id
+    if (req.query.owner) {
+      query.owner = req.query.owner
+    }
+    if (req.query.division) {
+      query.division = req.query.division
     }
     Team.find(query, (err, docs) => {
       if (err) {
@@ -40,18 +45,17 @@ router
         return
       }
       res.json(docs)
-    })
-      .lean()
-      .populate('division', 'name')
-      .populate('captain', 'username discriminator')
-      .populate({
-        path: 'players',
-        populate: { path: 'player', select: 'username discriminator' }
-      })
+    }).lean()
+    // .populate('division', 'name')
+    // .populate('captain', 'username discriminator')
+    // .populate({
+    //   path: 'players',
+    //   populate: { path: 'player', select: 'username discriminator' }
+    // })
   })
-  .post(captainAuth, upload.single('logo'), (req, res) => {
+  .post(userAuth, upload.single('logo'), (req, res) => {
     const doc = new Team({ ...req.body })
-    doc.captain = req.session.user._id
+    doc.owner = req.session.user._id // prevent creating teams in others' names
     if (req.file) {
       doc.logo = req.file
     }
@@ -66,82 +70,38 @@ router
 
 router
   .route('/:teamID')
-  .put(captainAuth, upload.single('logo'), (req, res) => {
+  .put(userAuth, upload.single('logo'), (req, res) => {
     Team.findById(req.params.teamID, (err, doc) => {
       if (err) res.status(500).send(err)
-      if (doc.captain === req.session.user._id) {
-        delete req.body.division
-        delete req.body.captain
-        Object.assign(doc, req.body)
-        if (req.file) {
-          doc.logo = req.file
-        }
-        doc.save((err) => {
-          if (err) res.status(500).send(err)
-          res.sendStatus(200)
-        })
-      } else if (req.session.user.roles.includes(process.env.ADMIN_ROLE_ID)) {
-        delete req.body.captain
-        Object.assign(doc, req.body)
-        if (req.file) {
-          doc.logo = req.file
-        }
-        doc.save((err) => {
-          if (err) res.status(500).send(err)
-          res.sendStatus(200)
-        })
+      if (req.session.user.roles.includes(ADMIN_ROLE_ID)) { // allow admin full write
+      } else if (doc.owner === req.session.user._id) { // allow owner partial write
+        delete req.body.division // prevent overwriting division
+        delete req.body.owner // and owner
       } else {
-        if (err) res.sendStatus(403)
+        res.sendStatus(403)
+        return
       }
+      Object.assign(doc, req.body)
+      if (req.file) {
+        doc.logo = req.file
+      }
+      doc.save((err) => {
+        if (err) res.status(500).send(err)
+        res.sendStatus(200)
+      })
     })
   })
-  .delete(captainAuth, (req, res) => {
+  .delete(userAuth, (req, res) => {
+    const query = { _id: req.params.teamID }
+    if (req.session.user.roles.includes(ADMIN_ROLE_ID)) { // allow admin full deletion
+    } else { query.owner = req.session.user._id } // otherwise, search for only this user's teams
     Team.deleteOne(
-      { _id: req.params.teamID, captain: req.session.user._id },
+      query,
       (err) => {
         if (err) res.status(500).send(err)
         res.sendStatus(200)
       }
     )
-  })
-router.route('/:teamID/assignments').post(captainAuth, (req, res) => {
-  Team.findById(req.params.teamID, async (err, doc) => {
-    if (err) res.status(500).send(err)
-    doc.players.push(new Assignment({ ...req.body }))
-    await doc.populate({
-      path: 'players',
-      populate: { path: 'player', select: 'verified' }
-    })
-    doc.save((err) => {
-      if (err) {
-        res.status(500).send(err)
-        return
-      }
-      res.sendStatus(200)
-    })
-  }).populate('division', 'playerRole')
-})
-router
-  .route('/:teamID/assignments/:assignmentID')
-  .delete(captainAuth, (req, res) => {
-    Team.findById(req.params.teamID, (err, doc) => {
-      if (err) res.status(500).send(err)
-      const index = doc.players.findIndex((assign) => {
-        return assign._id.toString() === req.params.assignmentID
-      })
-      if (index > -1) {
-        doc.players.splice(index, 1)
-        doc.save((err) => {
-          if (err) {
-            res.status(500).send(err)
-            return
-          }
-          res.sendStatus(200)
-        })
-      } else {
-        res.status(500).send('No such assignment.')
-      }
-    }).populate('division', 'playerRole')
   })
 
 router.use('/logos', express.static('logos', { setHeaders, maxAge: '1y' }))

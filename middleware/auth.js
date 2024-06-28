@@ -7,25 +7,13 @@ import {
   getCurrentUser,
   getGuildRoles
 } from '../drivers/discord.js'
-import intersect from 'just-intersect'
 
-const captainRoleIDs = process.env.CAPTAIN_ROLE_IDS.split(',')
 const adminRoleID = process.env.ADMIN_ROLE_ID
 const scoresaberRoleID = process.env.SCORESABER_ROLE_ID
 
 export const userAuth = (req, res, next) => {
   if (req.session.user) next()
   else res.sendStatus(401)
-}
-export const captainAuth = (req, res, next) => {
-  if (req.session.user) {
-    if (
-      intersect(req.session.user.roles, captainRoleIDs) > 0 ||
-      req.session.user.roles.includes(adminRoleID)
-    ) {
-      next()
-    } else res.sendStatus(403)
-  } else res.sendStatus(401)
 }
 export const adminAuth = (req, res, next) => {
   if (req.session.user) {
@@ -53,7 +41,7 @@ router.get('/callback', async (req, res) => {
     {
       _id: discordUser.id,
       username: discordUser.username,
-      discriminator: discordUser.discriminator,
+      global_name: discordUser.global_name,
       roles: discordRoles,
       avatar: discordUser.avatar,
       auth: tokenResponse
@@ -98,9 +86,6 @@ router.get('/me', userAuth, async (req, res) => {
   }
   if (clean.roles.includes(scoresaberRoleID)) {
     clean.sc = true
-  }
-  if (intersect(clean.roles, captainRoleIDs) > 0) {
-    clean.captain = true
   }
   res.json(clean)
 })
