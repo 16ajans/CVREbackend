@@ -1,0 +1,37 @@
+/divisions
+	Get (public)
+	Post (admin)
+	/:divisionID
+		Put (admin)
+		Delete (admin)
+
+/teams
+	Get (public)
+		? owner
+		? division
+	Post (user)
+	/:teamID
+		Put (owner)
+		Delete (owner)
+       /logos - static (public)
+       
+/assignments
+	Get (public)
+		? player
+		? team
+		? state
+	Post (user, only for self)
+	/:assignmentID
+		Put (user/owner, only owner can accept)
+		Delete (user/owner)
+
+/users
+	Get (admin)
+		? state
+	/:userID
+		Get - sanitized (public)
+		Put (admin)
+		Delete (admin)
+
+/roles
+       Get (user)
